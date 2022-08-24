@@ -199,7 +199,7 @@ occ_vs_rev_by_reviews = alt.Chart(df2).mark_point().encode(
     alt.Y('revenue:Q', scale=alt.Scale(zero=False)),
     size='rating:O',
     tooltip=["name", "guests", "rating"],
-    href='url:N',
+    # href='url:N',
     color=alt.condition(
         alt.datum.reviews >= selector.cutoff,
         alt.value('steelblue'), alt.value('darkorange')),

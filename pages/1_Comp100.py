@@ -128,7 +128,7 @@ cor_plot = (base.mark_rect().encode(
     color="correlation:Q"
     ).properties(width=600, 
                  height=480,
-                 title-'Correlations')
+                 title='Correlations')
 )
 
 st.altair_chart(cor_plot + text)

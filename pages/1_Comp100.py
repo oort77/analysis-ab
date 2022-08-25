@@ -293,6 +293,7 @@ adr_histo = (
     .encode(
         alt.X("adr:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()"),
+        tooltip=["count()"]
     ).properties(width=600,
                  height=300,
                  title="Average daily rates distribution"))

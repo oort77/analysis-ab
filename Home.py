@@ -23,9 +23,21 @@ from PIL import Image
 image = Image.open("./images/header.png")
 st.image(image)
 st.write("#### Airbnb - анализ")
-# st.markdown("---")
 
 st.write(
-    "- **Comp100** - анализ данных по 100 наиболее схожим домам на основе данных airdna.com"
+    "**Comp100** - анализ данных по 100 наиболее схожим домам на основе данных airdna.com")
+
+st.markdown("""
+    Обозначения:  
+    - beds - количество кроватей  
+    - bathrooms - ванные  
+    - guests - максимальное количество гостей  
+    - rating - рейтинг  
+    - reviews - количество отзывов  
+    - distance - расстояние до центра Лукки  
+    - occupancy - заполняемость  
+    - adr - средняя дневная ставка аренды  
+    - revenue - годовая выручка  
+    - sim_score - степень похожести"""
 )
-st.write("- **Villa** - статистики по дому")
+st.write("**Villa** - статистики по дому")

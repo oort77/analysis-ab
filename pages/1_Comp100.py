@@ -96,6 +96,43 @@ df["revenue"] = df["revenue"].astype(int)
 #TODO: make it open in another tab
 
 #%%
+
+# Correlations
+
+cor_data = (
+    df.corr()
+    .stack()
+    .reset_index()
+    .rename(columns={0: "correlation", "level_0": "variable", "level_1": "variable2"})
+)
+cor_data["correlation_label"] = cor_data["correlation"].map("{:.2f}".format)
+# cor_data.head(12)
+
+base = alt.Chart(cor_data).encode(
+    x="variable2:O", 
+    y="variable:O")
+
+# Text layer with correlation labels
+# Colors are for easier readability
+text = base.mark_text().encode(
+    text="correlation_label",
+    color=alt.condition(
+        alt.datum.correlation > 0.5, 
+        alt.value("white"), 
+        alt.value("black")
+    ),
+)
+
+# The correlation heatmap itself
+cor_plot = (base.mark_rect().encode(
+    color="correlation:Q"
+    ).properties(width=600, 
+                 height=480,
+                 title-'Correlations')
+)
+
+st.altair_chart(cor_plot + text)
+#%%
 # Interactive crossfilter:
 # payouts, occupancy, rating
 

@@ -289,12 +289,13 @@ st.altair_chart(ratings_histo)
 # ADR histogram
 
 adr_histo = (
-    alt.Chart(df).mark_bar(
-        size=10, color="darkorange")  # & datum.guests>10'
+    alt.Chart(df).mark_bar(size=10, color="darkorange")  # & datum.guests>10'
     .encode(
         alt.X("adr:Q", bin=True, scale=alt.Scale(zero=False)),
-        alt.Y("count()", 
-    ).properties(width=600, height=300, title="Average daily rates distribution"))
+        alt.Y("count()"),
+    ).properties(width=600,
+                 height=300,
+                 title="Average daily rates distribution"))
 
 st.altair_chart(adr_histo)
 #%%

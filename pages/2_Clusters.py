@@ -290,7 +290,8 @@ st.write("**Характеристики кластера 0:**")
 st.markdown(""" **Меньшие по размеру дома**  
             - меньшее количество кроватей  
             - меньшее количество гостей  
-            - меньшее количество ванных""")
+            - меньшее количество ванных
+            - скорее высокий рейтинг""")
 
 #%%
 st.markdown("---")
@@ -335,7 +336,8 @@ st.write("**Характеристики кластера 2:**")
 st.markdown("""**Большие дома**  
             - большое количество гостей  
             - большое количество ванных  
-            - среднее удаленные от города""")
+            - среднее удаление от города
+            - любой рейтинг""")
 #%%
 st.markdown("---")
 
@@ -360,7 +362,7 @@ adr_chart = alt.Chart(df_km).transform_density(
     alt.Color('cluster:N'),
     tooltip=['cluster:N']
 ).properties(
-    title='Distribution of ADR per cluster',
+    title='Distribution of revenue per cluster',
     width=800,
     height=400
 )

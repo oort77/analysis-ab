@@ -307,7 +307,7 @@ explainer = shap.TreeExplainer(mdl)
 def get_shap_values(x, expl):
     return expl.shap_values(x)
 
-shap_values = get_shap_values(X, expl)
+shap_values = get_shap_values(X, explainer)
 #%%
 fig, ax = plt.subplots()
 plt.title("Feature importance based on SHAP values")

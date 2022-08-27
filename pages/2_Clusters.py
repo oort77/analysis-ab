@@ -291,23 +291,32 @@ params["random_state"] = 42
 
 mdl = lgb.LGBMClassifier(**params)
 
-X = df.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
+X =  df.drop(columns=['revenue', 'pca1', 'pca2', 'member']) #adr
 
-@st.cache
-def lgbm_predict(x):
-    mdl.fit(x, preds)
-    return mdl.predict_proba(x)
+mdl.fit(X, preds)
 
-y_pred = lgbm_predict(X)
+y_pred = mdl.predict_proba(X)
+
+# mdl = lgb.LGBMClassifier(**params)
+
+# X = df.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
+
+# @st.cache
+# def lgbm_predict(x):
+#     mdl.fit(x, preds)
+#     return mdl.predict_proba(x)
+
+# y_pred = lgbm_predict(X)
 #%%
 # SHAP explainer
 explainer = shap.TreeExplainer(mdl)
+shap_values = explainer.shap_values(X)
 
-@st.cache
-def get_shap_values(x, expl):
-    return expl.shap_values(x)
+# @st.cache
+# def get_shap_values(x, expl):
+#     return expl.shap_values(x)
 
-shap_values = get_shap_values(X, explainer)
+# shap_values = get_shap_values(X, explainer)
 #%%
 fig, ax = plt.subplots()
 plt.title("Feature importance based on SHAP values")

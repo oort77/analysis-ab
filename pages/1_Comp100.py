@@ -184,7 +184,7 @@ revenue_vs_occupancy = (alt.Chart(df).transform_filter(
         ],
         color=alt.Color("rating:O", scale=alt.Scale(scheme="category20c")),
         href="url:N",
-    ).properties(width=600, height=300, title="Revenue vs Occupancy"))
+    ).properties(width=600, height=400, title="Revenue vs Occupancy"))
 revenue_vs_occupancy["usermeta"] = {
     "embedOptions": {
         "loader": {

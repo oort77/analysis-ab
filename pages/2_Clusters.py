@@ -264,9 +264,6 @@ st.write('**Важность признаков - SHAP анализ**')
 fig, ax = plt.subplots()
 plt.title('Feature importance based on SHAP values')
 shap.summary_plot(shap_values, X)
-plt.title(f'Cluster {cnr}')
-st.pyplot(plt)
-
 st.pyplot(fig, bbox_inches='tight')
 
 #%%

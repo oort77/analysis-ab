@@ -291,12 +291,12 @@ params["random_state"] = 42
 
 mdl = lgb.LGBMClassifier(**params)
 
-X = X.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
+X = df.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
 
 @st.cache
-def lgbm_predict(df):
-    mdl.fit(df, preds)
-    return mdl.predict_proba(df)
+def lgbm_predict(x):
+    mdl.fit(x, preds)
+    return mdl.predict_proba(x)
 
 y_pred = lgbm_predict(X)
 #%%
@@ -305,8 +305,8 @@ explainer = shap.TreeExplainer(mdl)
 
 
 @st.cache
-def get_shap_values(df):
-    return explainer.shap_values(df)
+def get_shap_values(x):
+    return explainer.shap_values(x)
 
 shap_values = get_shap_values(X)
 #%%

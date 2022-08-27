@@ -41,10 +41,7 @@ def get_txt():
 
 txt = get_txt()
 raw_data = list(map(lambda x: x[:-1], txt))
-data_dict = {
-    i: raw_data[i * 11:(i + 1) * 11]
-    for i in range(len(raw_data) // 11)
-}
+data_dict = {i: raw_data[i * 11 : (i + 1) * 11] for i in range(len(raw_data) // 11)}
 
 df = pd.DataFrame(data_dict).T
 df.columns = [
@@ -109,11 +106,12 @@ df["revenue"] = df["revenue"].astype(int)
 # Correlations
 st.write("**Корреляции между признаками**")
 
-cor_data = (df.corr().stack().reset_index().rename(columns={
-    0: "correlation",
-    "level_0": "variable",
-    "level_1": "variable2"
-}))
+cor_data = (
+    df.corr()
+    .stack()
+    .reset_index()
+    .rename(columns={0: "correlation", "level_0": "variable", "level_1": "variable2"})
+)
 cor_data["correlation_label"] = cor_data["correlation"].map("{:.2f}".format)
 # cor_data.head(12)
 
@@ -123,13 +121,17 @@ base = alt.Chart(cor_data).encode(x="variable2:O", y="variable:O")
 # Colors are for easier readability
 text = base.mark_text().encode(
     text="correlation_label",
-    color=alt.condition(alt.datum.correlation > 0.5, alt.value("white"),
-                        alt.value("black")),
+    color=alt.condition(
+        alt.datum.correlation > 0.5, alt.value("white"), alt.value("black")
+    ),
 )
 
 # The correlation heatmap itself
-cor_plot = (base.mark_rect().encode(color="correlation:Q").properties(
-    width=600, height=480, title="Correlations"))
+cor_plot = (
+    base.mark_rect()
+    .encode(color="correlation:Q")
+    .properties(width=600, height=480, title="Correlations")
+)
 
 st.altair_chart(cor_plot + text)
 #%%
@@ -143,11 +145,15 @@ brush = alt.selection(type="interval", encodings=["x"])
 
 # Define the base chart, with the common parts of the
 # background and highlights
-base = (alt.Chart().mark_bar(color="steelblue").encode(
-    x=alt.X(alt.repeat("column"), type="quantitative",
-            bin=alt.Bin(maxbins=20)),
-    y="count()",
-).properties(width=150, height=200))
+base = (
+    alt.Chart()
+    .mark_bar(color="steelblue")
+    .encode(
+        x=alt.X(alt.repeat("column"), type="quantitative", bin=alt.Bin(maxbins=20)),
+        y="count()",
+    )
+    .properties(width=150, height=200)
+)
 
 # gray background with selection
 background = base.encode(color=alt.value("#ddd")).add_selection(brush)
@@ -156,10 +162,11 @@ background = base.encode(color=alt.value("#ddd")).add_selection(brush)
 highlight = base.transform_filter(brush)
 
 # layer the two charts & repeat
-crossfilter = (alt.layer(
-    background, highlight,
-    data=df2).repeat(column=["revenue", "rating", "occupancy"]).properties(
-        title="Interactive crossfilter: revenue, rating, occupancy"))
+crossfilter = (
+    alt.layer(background, highlight, data=df2)
+    .repeat(column=["revenue", "rating", "occupancy"])
+    .properties(title="Interactive crossfilter: revenue, rating, occupancy")
+)
 
 st.altair_chart(crossfilter)
 #%%
@@ -168,8 +175,11 @@ st.markdown("---")
 st.write("**Зависимость годовой выручки от заполняемости**")
 st.write("Можно тыкать, нажимая Shift, чтобы посмотреть дом на Airbnb")
 
-revenue_vs_occupancy = (alt.Chart(df).transform_filter(
-    "datum.revenue < 200000").mark_point().encode(
+revenue_vs_occupancy = (
+    alt.Chart(df)
+    .transform_filter("datum.revenue < 200000")
+    .mark_point()
+    .encode(
         alt.X("occupancy:Q", scale=alt.Scale(zero=False)),
         alt.Y("revenue:Q", scale=alt.Scale(zero=False)),
         size="guests:O",
@@ -184,14 +194,10 @@ revenue_vs_occupancy = (alt.Chart(df).transform_filter(
         ],
         color=alt.Color("rating:O", scale=alt.Scale(scheme="category20c")),
         href="url:N",
-    ).properties(width=600, height=400, title="Revenue vs Occupancy"))
-revenue_vs_occupancy["usermeta"] = {
-    "embedOptions": {
-        "loader": {
-            "target": "_blank"
-        }
-    }
-}
+    )
+    .properties(width=600, height=400, title="Revenue vs Occupancy")
+)
+revenue_vs_occupancy["usermeta"] = {"embedOptions": {"loader": {"target": "_blank"}}}
 
 st.altair_chart(revenue_vs_occupancy)
 # %%
@@ -201,28 +207,32 @@ st.markdown("---")
 st.write("**Распределение выручки при рейтинге > 4**")
 
 occupancy_distr = (
-    alt.Chart(df).transform_filter(
-        "datum.revenue < 200000")  # & datum.guests>10'
-    .mark_bar(size=10, color="darkseagreen").encode(
+    alt.Chart(df)
+    .transform_filter("datum.revenue < 200000")  # & datum.guests>10'
+    .mark_bar(size=10, color="darkseagreen")
+    .encode(
         alt.X("occupancy:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()", scale=alt.Scale(zero=False)),
         tooltip=["count()"],
-    ).properties(width=600,
-                 height=300,
-                 title="Occupancy distribution, rating>4?"))
+    )
+    .properties(width=600, height=300, title="Occupancy distribution, rating>4?")
+)
 
 occupancy_distr_rating4plus = (
-    alt.Chart(df).transform_filter(
-        "datum.revenue < 200000  & datum.rating>4").mark_bar(
-            size=10, color="darkorange").encode(
-                alt.X("occupancy:Q", bin=True, scale=alt.Scale(zero=False)),
-                alt.Y("count()", scale=alt.Scale(zero=False)),
-                tooltip=["count()"],
-            ).properties(
-                width=600,
-                height=300,
-                # title='Occupancy distribution, airdna_comp100'
-            ))
+    alt.Chart(df)
+    .transform_filter("datum.revenue < 200000  & datum.rating>4")
+    .mark_bar(size=10, color="darkorange")
+    .encode(
+        alt.X("occupancy:Q", bin=True, scale=alt.Scale(zero=False)),
+        alt.Y("count()", scale=alt.Scale(zero=False)),
+        tooltip=["count()"],
+    )
+    .properties(
+        width=600,
+        height=300,
+        # title='Occupancy distribution, airdna_comp100'
+    )
+)
 chart1 = occupancy_distr + occupancy_distr_rating4plus
 
 st.altair_chart(chart1)
@@ -232,12 +242,13 @@ st.markdown("---")
 st.write("**Зависимость выручки от заполняемости - важно ли количество отзывов?**")
 
 slider = alt.binding_range(min=0, max=125, step=2, name="Number of reviews:")
-selector = alt.selection_single(name="SelectorName",
-                                fields=["cutoff"],
-                                bind=slider,
-                                init={"cutoff": 0})
+selector = alt.selection_single(
+    name="SelectorName", fields=["cutoff"], bind=slider, init={"cutoff": 0}
+)
 occ_vs_rev_by_reviews = (
-    alt.Chart(df2).mark_point().encode(
+    alt.Chart(df2)
+    .mark_point()
+    .encode(
         alt.X("occupancy:Q", scale=alt.Scale(zero=False)),
         alt.Y("revenue:Q", scale=alt.Scale(zero=False)),
         size="rating:O",
@@ -248,11 +259,14 @@ occ_vs_rev_by_reviews = (
             alt.value("steelblue"),
             alt.value("darkorange"),
         ),
-    ).add_selection(selector).properties(
+    )
+    .add_selection(selector)
+    .properties(
         width=600,
         height=300,
         title="Occupancy vs revenue: is number of reviews important?",
-    ))
+    )
+)
 
 st.altair_chart(occ_vs_rev_by_reviews)
 # %%
@@ -264,25 +278,30 @@ st.write("**Распределение выручки - как зависит о
 outlier_idx = df.loc[df["revenue"] > 200000].index
 df2 = df.drop(outlier_idx)
 
-revenue_all = (alt.Chart(df2).transform_calculate(
-    color="datum.rating > 0").mark_bar(size=10).encode(
+revenue_all = (
+    alt.Chart(df2)
+    .transform_calculate(color="datum.rating > 0")
+    .mark_bar(size=10)
+    .encode(
         alt.X("revenue:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()", scale=alt.Scale(zero=False)),
         tooltip=["count()"],
-    ).properties(width=600,
-                 height=300,
-                 title="Revenue distribution, rating>4?"))
+    )
+    .properties(width=600, height=300, title="Revenue distribution, rating>4?")
+)
 
 revenue_4plus = (
-    alt.Chart(df2).transform_filter("datum.rating>=4").transform_calculate(
-        color="datum.rating > 4")  # ? 'rating>4': 'all ratings'"
-    .mark_bar(size=10, opacity=0.5).encode(
+    alt.Chart(df2)
+    .transform_filter("datum.rating>=4")
+    .transform_calculate(color="datum.rating > 4")  # ? 'rating>4': 'all ratings'"
+    .mark_bar(size=10, opacity=0.5)
+    .encode(
         alt.X("revenue:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()", scale=alt.Scale(zero=False)),
-        color=alt.Color("color:N",
-                        scale=alt.Scale(range=["lightgreen", "steelblue"])),
+        color=alt.Color("color:N", scale=alt.Scale(range=["lightgreen", "steelblue"])),
         tooltip=["count()"],
-    ))
+    )
+)
 chart2 = revenue_all + revenue_4plus
 
 st.altair_chart(chart2)
@@ -294,12 +313,15 @@ st.markdown("---")
 st.write("**Распределение (высоких) рейтингов**")
 
 ratings_histo = (
-    alt.Chart(df).transform_filter("datum.rating >= 4.4").mark_bar(
-        size=10, color="steelblue")  # & datum.guests>10'
+    alt.Chart(df)
+    .transform_filter("datum.rating >= 4.4")
+    .mark_bar(size=10, color="steelblue")  # & datum.guests>10'
     .encode(
         alt.X("rating:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()", scale=alt.Scale(zero=False)),
-    ).properties(width=600, height=300, title="Ratings (> 4.4) distribution"))
+    )
+    .properties(width=600, height=300, title="Ratings (> 4.4) distribution")
+)
 
 st.altair_chart(ratings_histo)
 # %%
@@ -308,14 +330,15 @@ st.markdown("---")
 st.write("**Распределение средней дневной аредной ставки**")
 
 adr_histo = (
-    alt.Chart(df).mark_bar(size=10, color="darkorange")  # & datum.guests>10'
+    alt.Chart(df)
+    .mark_bar(size=10, color="darkorange")  # & datum.guests>10'
     .encode(
         alt.X("adr:Q", bin=True, scale=alt.Scale(zero=False)),
         alt.Y("count()"),
-        tooltip=["count()"]
-    ).properties(width=600,
-                 height=300,
-                 title="Average daily rates distribution"))
+        tooltip=["count()"],
+    )
+    .properties(width=600, height=300, title="Average daily rates distribution")
+)
 
 st.altair_chart(adr_histo)
 #%%
@@ -324,14 +347,16 @@ st.altair_chart(adr_histo)
 st.markdown("---")
 st.write("**Зависимость медианной выручки от рейтинга (>4)**")
 
-revenue_vs_rating = (alt.Chart(df).transform_filter(
-    "datum.rating > 4 & datum.revenue<200000").mark_bar(
-        size=10, color="darkseagreen").encode(
-            alt.X("rating:Q", bin=True, scale=alt.Scale(zero=False)),
-            alt.Y("median(revenue):Q", scale=alt.Scale(zero=False)),
-        ).properties(width=600,
-                     height=300,
-                     title="Median revenue vs Rating (> 4)"))
+revenue_vs_rating = (
+    alt.Chart(df)
+    .transform_filter("datum.rating > 4 & datum.revenue<200000")
+    .mark_bar(size=10, color="darkseagreen")
+    .encode(
+        alt.X("rating:Q", bin=True, scale=alt.Scale(zero=False)),
+        alt.Y("median(revenue):Q", scale=alt.Scale(zero=False)),
+    )
+    .properties(width=600, height=300, title="Median revenue vs Rating (> 4)")
+)
 st.altair_chart(revenue_vs_rating)
 # %%
 
@@ -339,31 +364,37 @@ st.altair_chart(revenue_vs_rating)
 st.markdown("---")
 st.write("**Распределение выручки: все рейтинги/высокие рейтинги**")
 
-revenue_kde_4 = (alt.Chart(df).transform_filter(
-    "datum.rating > 4 & datum.revenue<200000").transform_density(
-        "revenue",
-        as_=["revenue",
-             "density"]).mark_area(color="darkred", opacity=0.25).encode(
-                 y="density:Q",
-                 x="revenue:Q",
-             ).properties(
-                 width=600,
-                 height=300,
-                 title="Revenue distribution KDE, rating>4 vs all ratings",
-             ))
+revenue_kde_4 = (
+    alt.Chart(df)
+    .transform_filter("datum.rating > 4 & datum.revenue<200000")
+    .transform_density("revenue", as_=["revenue", "density"])
+    .mark_area(color="darkred", opacity=0.25)
+    .encode(
+        y="density:Q",
+        x="revenue:Q",
+    )
+    .properties(
+        width=600,
+        height=300,
+        title="Revenue distribution KDE, rating>4 vs all ratings",
+    )
+)
 
 revenue_kde_all = (
-    alt.Chart(df).transform_filter("datum.revenue<200000").transform_density(
-        "revenue",
-        as_=["revenue",
-             "density"]).mark_area(color="darkblue", opacity=0.25).encode(
-                 y="density:Q",
-                 x="revenue:Q",
-             ).properties(
-                 width=600,
-                 height=300,
-                 title="Revenue distribution KDE, all ratings",
-             ))
+    alt.Chart(df)
+    .transform_filter("datum.revenue<200000")
+    .transform_density("revenue", as_=["revenue", "density"])
+    .mark_area(color="darkblue", opacity=0.25)
+    .encode(
+        y="density:Q",
+        x="revenue:Q",
+    )
+    .properties(
+        width=600,
+        height=300,
+        title="Revenue distribution KDE, all ratings",
+    )
+)
 
 final = revenue_kde_4 + revenue_kde_all
 

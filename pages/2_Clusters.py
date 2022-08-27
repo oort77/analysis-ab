@@ -303,12 +303,11 @@ y_pred = lgbm_predict(X)
 # SHAP explainer
 explainer = shap.TreeExplainer(mdl)
 
-
 @st.cache
-def get_shap_values(x):
-    return explainer.shap_values(x)
+def get_shap_values(x, expl):
+    return expl.shap_values(x)
 
-shap_values = get_shap_values(X)
+shap_values = get_shap_values(X, expl)
 #%%
 fig, ax = plt.subplots()
 plt.title("Feature importance based on SHAP values")

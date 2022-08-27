@@ -61,7 +61,7 @@ df.drop(columns="Guests", inplace=True)
 
 # %%
 # Visualize guests payouts by country
-
+st.write("**Выплаты - хронология**")
 guests_by_country = (
     alt.Chart(df)
     .mark_circle(size=60)
@@ -78,7 +78,7 @@ guests_by_country.configure_axisX(labelAngle=0)
 st.altair_chart(guests_by_country)
 # %%
 # Visualize Booking lag by country
-
+st.write("**За сколько дней бронировали - по странам**")
 booking_lag = (
     alt.Chart(df)
     .mark_circle(size=60)
@@ -121,7 +121,7 @@ final_plot = (
 st.altair_chart(final_plot)
 # %%
 # Visualize Booking lag by kids
-
+st.write("**За сколько дней бронировали - по количеству детей**")
 booking_lag_kids = (
     alt.Chart(df)
     .mark_circle(size=60)
@@ -164,6 +164,7 @@ final_plot = (
 st.altair_chart(final_plot)
 # %%
 # Visualize Payouts by country
+st.write("**Размеры выплат по странам**")
 
 payouts = (
     alt.Chart(df)

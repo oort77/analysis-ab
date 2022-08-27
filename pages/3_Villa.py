@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-#  File: 2_villa.py
-#  Project: 'st-airbnb'
+#  File: 3_villa.py
+#  Project: 'analysis-ab'
 #  Created by Gennady Matveev (gm@og.ly) on 22-08-2022.
 #  Copyright 2022. All rights reserved.
 #%%

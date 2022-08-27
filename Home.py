@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  File: Home.py
-#  Project: 'st-airbnb'
+#  Project: 'analysis-ab'
 #  Created by Gennady Matveev (gm@og.ly) on 22-08-2022.
 #  Copyright 2022. All rights reserved.
 #%%
@@ -26,6 +26,10 @@ st.write("#### Airbnb - анализ")
 
 st.write(
     "**Comp100** - анализ данных по 100 наиболее схожим домам на основе данных airdna.com")
+
+st.write(
+    "**Clusters** - кластерный анализ Comp100"
+)
 
 st.markdown("""
     Обозначения:  

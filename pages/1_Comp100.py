@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  File: 1_comp100.py
-#  Project: 'st-airbnb'
+#  Project: 'analysis-ab'
 #  Created by Gennady Matveev (gm@og.ly) on 22-08-2022.
 #  Copyright 2022. All rights reserved.
 #%%
@@ -15,6 +15,7 @@ import gdown
 import re
 
 #%%
+# Configure streamlit page
 st.set_page_config(
     page_title="Competition-100",
     page_icon="./images/nazca_lines.ico",

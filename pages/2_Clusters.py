@@ -293,7 +293,7 @@ mdl = lgb.LGBMClassifier(**params)
 
 
 @st.cache
-X = df.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
+X = X.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
 def lgbm_predict(df):
     mdl.fit(df, preds)
     return mdl.predict_proba(df)

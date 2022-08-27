@@ -24,7 +24,7 @@ st.set_page_config(
     menu_items=None,
 )
 
-st.markdown("#### Analysis of 100 closest competitors")
+st.markdown("#### Анализ 100 наиболее похожих конкурентов")
 st.markdown("---")
 
 #%%
@@ -107,6 +107,7 @@ df["revenue"] = df["revenue"].astype(int)
 #%%
 
 # Correlations
+st.write("**Корреляции между признаками**")
 
 cor_data = (df.corr().stack().reset_index().rename(columns={
     0: "correlation",
@@ -134,6 +135,9 @@ st.altair_chart(cor_plot + text)
 #%%
 # Interactive crossfilter:
 # payouts, occupancy, rating
+st.markdown("---")
+st.write("**Интерактивный кросс-фильтр - выручка, рейтинг, заполняемость**")
+
 
 brush = alt.selection(type="interval", encodings=["x"])
 
@@ -160,6 +164,10 @@ crossfilter = (alt.layer(
 st.altair_chart(crossfilter)
 #%%
 # Revenue vs occupancy
+st.markdown("---")
+st.write("**Зависимость годовой выручки от заполняемости**")
+st.write("Можно тыкать, нажимая Shift, чтобы посмотреть дом на Airbnb")
+
 revenue_vs_occupancy = (alt.Chart(df).transform_filter(
     "datum.revenue < 200000").mark_point().encode(
         alt.X("occupancy:Q", scale=alt.Scale(zero=False)),
@@ -189,6 +197,8 @@ st.altair_chart(revenue_vs_occupancy)
 # %%
 
 # Occupancy distribution (rating > 4 vs all)
+st.markdown("---")
+st.write("**Распределение выручки при рейтинге > 4**")
 
 occupancy_distr = (
     alt.Chart(df).transform_filter(
@@ -218,6 +228,8 @@ chart1 = occupancy_distr + occupancy_distr_rating4plus
 st.altair_chart(chart1)
 #%%
 # Occupancy vs revenue, is number of reviews important?
+st.markdown("---")
+st.write("**Зависимость выручки от заполняемости - важно ли количество отзывов?**")
 
 slider = alt.binding_range(min=0, max=125, step=2, name="Number of reviews:")
 selector = alt.selection_single(name="SelectorName",
@@ -246,6 +258,8 @@ st.altair_chart(occ_vs_rev_by_reviews)
 # %%
 
 # Revenue distribution (rating > 4 vs all)
+st.markdown("---")
+st.write("**Распределение выручки - как зависит от рейтинга?**")
 
 outlier_idx = df.loc[df["revenue"] > 200000].index
 df2 = df.drop(outlier_idx)
@@ -276,6 +290,8 @@ st.altair_chart(chart2)
 # %%
 
 # Ratings > 4.4 histogram
+st.markdown("---")
+st.write("**Распределение (высоких) рейтингов**")
 
 ratings_histo = (
     alt.Chart(df).transform_filter("datum.rating >= 4.4").mark_bar(
@@ -288,6 +304,8 @@ ratings_histo = (
 st.altair_chart(ratings_histo)
 # %%
 # ADR histogram
+st.markdown("---")
+st.write("**Распределение средней дневной аредной ставки**")
 
 adr_histo = (
     alt.Chart(df).mark_bar(size=10, color="darkorange")  # & datum.guests>10'
@@ -303,6 +321,8 @@ st.altair_chart(adr_histo)
 #%%
 
 # Visualize median revenue vs rating
+st.markdown("---")
+st.write("**Зависимость медианной выручки от рейтинга (>4)**")
 
 revenue_vs_rating = (alt.Chart(df).transform_filter(
     "datum.rating > 4 & datum.revenue<200000").mark_bar(
@@ -316,6 +336,8 @@ st.altair_chart(revenue_vs_rating)
 # %%
 
 # Visualize revenue KDE (rating > 4 vs all)
+st.markdown("---")
+st.write("**Распределение выручки: все рейтинги/высокие рейтинги**")
 
 revenue_kde_4 = (alt.Chart(df).transform_filter(
     "datum.rating > 4 & datum.revenue<200000").transform_density(

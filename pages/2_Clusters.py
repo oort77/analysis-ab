@@ -291,9 +291,9 @@ params["random_state"] = 42
 
 mdl = lgb.LGBMClassifier(**params)
 
+X = X.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
 
 @st.cache
-X = X.drop(columns=["revenue", "pca1", "pca2", "member"])  # adr
 def lgbm_predict(df):
     mdl.fit(df, preds)
     return mdl.predict_proba(df)

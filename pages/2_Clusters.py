@@ -177,6 +177,8 @@ for i,c in enumerate(all_features):
     df_km[c] = X[:,i] #X_scaled[:,i]
 
 #%%
+st.markdown("**Кластеры и их характеристики**")
+
 brush = alt.selection(type='interval')
 
 domain = [0, 1, 2]#, 3]
@@ -187,10 +189,10 @@ points = alt.Chart(df_km).mark_circle(size=60).encode(
     y='pca2',
     color = alt.condition(brush, 'cluster:N', alt.value('lightgray')),
     tooltip = list(all_features)
-).add_selection(brush).properties(
-    width=300,
-    height=300
-)
+    ).properties(
+        width=300,
+        height=300
+).add_selection(brush)
 
 boxplots = alt.vconcat()
 for measure in all_features:
@@ -200,12 +202,14 @@ for measure in all_features:
             brush
     )
     boxplots &= boxplot
-st.markdown("**Кластеры и их характеристики**")
+
 chart = alt.hconcat(points, boxplots)
 
-# chart.save('cluster_pca_n_3.html'))
 st.altair_chart(chart)
 #%%
+st.markdown("---")
+st.write('**Важность признаков - SHAP анализ**')
+
 def plot_cluster(df, selected_columns, clusternr):
     points = alt.Chart(df).mark_circle(size=60).encode(
     x=alt.X('pca1', title='Principal component 1 (pca1)'),
@@ -258,13 +262,10 @@ y_pred = mdl.predict_proba(X)
 explainer = shap.TreeExplainer(mdl)
 shap_values = explainer.shap_values(X)
 #%%
-st.markdown("---")
-st.write('**Важность признаков - SHAP анализ**')
-
 fig, ax = plt.subplots()
 plt.title('Feature importance based on SHAP values')
 shap.summary_plot(shap_values, X)
-st.pyplot(fig, bbox_inches='tight')
+st.pyplot(fig)#, bbox_inches='tight')
 
 #%%
 st.markdown("---")
@@ -360,7 +361,7 @@ adr_chart = alt.Chart(df_km).transform_density(
     tooltip=['cluster:N']
 ).properties(
     title='Distribution of ADR per cluster',
-    width=600,
+    width=800,
     height=400
 )
 adr_chart

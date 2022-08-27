@@ -264,6 +264,9 @@ st.write('**Важность признаков - SHAP анализ**')
 fig, ax = plt.subplots()
 plt.title('Feature importance based on SHAP values')
 shap.summary_plot(shap_values, X)
+plt.title(f'Cluster {cnr}')
+st.pyplot(plt)
+
 st.pyplot(fig, bbox_inches='tight')
 
 #%%
@@ -289,7 +292,7 @@ st.write("**Характеристики кластера 0:**")
 st.markdown(""" **Меньшие по размеру дома**  
             - меньшее количество кроватей  
             - меньшее количество гостей  
-            - меньшее количество ванных)""")
+            - меньшее количество ванных""")
 
 #%%
 st.markdown("---")
@@ -320,7 +323,7 @@ st.write("**Кластер 2**")
 
 cnr = 2
 feature_order = np.argsort(np.sum(np.abs(shap_values[cnr]), axis=0))
-points, boxplots = plot_cluster(df_km, [X.columns[i] for i in feature_order][::-1][:5], cnr)
+points, boxplots = plot_cluster(df_km, [X.columns[i] for i in feature_order][::-1][:6], cnr)
 c2 = alt.hconcat(points, boxplots).properties(title=f'Cluster {cnr}')
 c2#.show()
 #%%
